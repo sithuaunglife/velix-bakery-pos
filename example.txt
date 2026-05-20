@@ -1,0 +1,151 @@
+"use client"; // only if using Next.js app directory
+
+import { useState } from "react";
+
+export default function TodoApp() {
+  const [todos, setTodos] = useState([]);
+  const [inputText, setInputText] = useState("");
+
+  // add new todo
+  const handleAdd = () => {
+    if (!inputText.trim()) return;
+    setTodos([
+      ...todos,
+      { id: Date.now(), text: inputText, done: false }
+    ]);
+    setInputText("");
+  };
+
+  // delete todo
+  const handleDelete = (id) => {
+    if (confirm("Are U sure to delete?")) {
+      setTodos(todos.filter((todo) => todo.id !== id));
+    }
+  };
+
+  // edit todo
+  const handleEdit = (id, newText) => {
+    setTodos(
+      todos.map((todo) =>
+        todo.id === id ? { ...todo, text: newText } : todo
+      )
+    );
+  };
+
+  // toggle done
+  const handleToggle = (id) => {
+    setTodos(
+      todos.map((todo) =>
+        todo.id === id ? { ...todo, done: !todo.done } : todo
+      )
+    );
+  };
+
+  const doneCount = todos.filter((t) => t.done).length;
+
+  return (
+    <div id="app" className="p-5">
+      <h1 id="heading" className="text-2xl mb-4">
+        My Todo List
+      </h1>
+
+      <div className="mb-4 flex gap-2">
+        <input
+          id="textInput"
+          className="border border-neutral-700 px-2 py-1 focus-visible:outline-none"
+          type="text"
+          value={inputText}
+          onChange={(e) => setInputText(e.target.value)}
+          onKeyUp={(e) => e.key === "Enter" && handleAdd()}
+        />
+        <button
+          id="addBtn"
+          className="border border-neutral-700 px-4 py-1"
+          onClick={handleAdd}
+        >
+          Add
+        </button>
+      </div>
+
+      <div className="mb-4 flex gap-4">
+        <span>
+          Done: <span id="doneCount">{doneCount}</span>
+        </span>
+        <span>
+          Total: <span id="listCount">{todos.length}</span>
+        </span>
+      </div>
+
+      <div id="listGroup" className="flex flex-col gap-2">
+        {todos.map((todo) => (
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            onDelete={handleDelete}
+            onEdit={handleEdit}
+            onToggle={handleToggle}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TodoItem({ todo, onDelete, onEdit, onToggle }) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [draftText, setDraftText] = useState(todo.text);
+
+  const handleBlur = () => {
+    onEdit(todo.id, draftText);
+    setIsEditing(false);
+  };
+
+  return (
+    <div
+      className="group animate__animated animate__fadeInLeft border mb-3 overflow-hidden border-neutral-700 p-5 flex justify-between items-center"
+    >
+      <div className="content flex items-center gap-3">
+        <input
+          className="list-check accent-neutral-700 w-4 h-4"
+          type="checkbox"
+          checked={todo.done}
+          onChange={() => onToggle(todo.id)}
+        />
+        {isEditing ? (
+          <input
+            className="border border-neutral-700 px-2 py-1 focus-visible:outline-none"
+            value={draftText}
+            onChange={(e) => setDraftText(e.target.value)}
+            onBlur={handleBlur}
+            onKeyUp={(e) => {
+              if (e.key === "Escape") handleBlur();
+              if (e.key === "Enter") handleBlur();
+            }}
+            autoFocus
+          />
+        ) : (
+          <div
+            className={`list-text ${todo.done ? "line-through" : ""}`}
+          >
+            {todo.text}
+          </div>
+        )}
+      </div>
+      <div className="control opacity-100 pointer-events-none duration-300 translate-x-[100px] group-hover:pointer-events-auto group-hover:opacity-100 group-hover:translate-x-0 flex gap-1">
+        <button
+          className="list-edit duration-300 active:scale-75 disabled:opacity-20"
+          onClick={() => !todo.done && setIsEditing(true)}
+          disabled={todo.done}
+        >
+          ✏️
+        </button>
+        <button
+          className="list-del duration-300 active:scale-75"
+          onClick={() => onDelete(todo.id)}
+        >
+          🗑️
+        </button>
+      </div>
+    </div>
+  );
+}
