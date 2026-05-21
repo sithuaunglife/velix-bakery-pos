@@ -1,6 +1,8 @@
+import { persist } from "zustand/middleware";
+
 const { create } = require("zustand");
 
-const useCategoryStore = create((set) => {
+const useCategoryStore = create(persist((set) => {
   return {
     categories: [
       { id: 0, title: "All" },
@@ -18,6 +20,6 @@ const useCategoryStore = create((set) => {
 
     selectCategory: (newCategory) => set({ activeCategory: newCategory }),
   };
-});
+}));
 
 export default useCategoryStore;

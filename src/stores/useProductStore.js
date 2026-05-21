@@ -1,7 +1,8 @@
 import React from "react";
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-const useProductStore = create((set, get) => ({
+const useProductStore = create(persist((set, get) => ({
   products: [
     {
       id: 1,
@@ -255,6 +256,6 @@ const useProductStore = create((set, get) => ({
   },
   q: "",
   setQ: (keyword) => set({ q: keyword }),
-}));
+})));
 
 export default useProductStore;
