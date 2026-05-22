@@ -57,7 +57,7 @@ const CategoryCreateForm = ({ setOpenDrawer }) => {
                 ? "border-red-500 focus:border-red-500 focus:ring-red-500"
                 : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
             }`}
-            placeholder="eg. drink"
+            placeholder="eg. Juice"
           />
           {errors.new_category_name && (
             <p className="text-red-600 text-sm mt-1">
