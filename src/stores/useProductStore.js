@@ -256,6 +256,10 @@ const useProductStore = create(persist((set, get) => ({
   },
   q: "",
   setQ: (keyword) => set({ q: keyword }),
-})));
+})
+,
+    {
+      name: "product-storage",
+    },));
 
 export default useProductStore;
