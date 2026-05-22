@@ -1,9 +1,14 @@
 import useVoucherStore from "@/stores/useVoucherStore";
 import React from "react";
 import VoucherItem from "./VoucherItem";
+import VoucherItemLoader from "./VoucherItemLoader";
 
 const VoucherItemList = () => {
-  const { items } = useVoucherStore();
+  const { items, hasHydrated } = useVoucherStore();
+
+  if (!hasHydrated) {
+    return <VoucherItemLoader />;
+  }
 
   return (
     <div>

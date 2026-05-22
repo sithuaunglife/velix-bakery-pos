@@ -12,7 +12,7 @@ const InventoryHeader = () => {
       <div className="col-span-1"></div>
       <div className="col-span-5 relative">
         <div className="flex justify-between items-center py-5">
-          <h3 className="text-2xl text-white">
+          <h3 suppressHydrationWarning className="text-2xl text-white">
             Product List ({filteredProducts(activeCategory, q).length})
           </h3>
           <ProductSearchInput />
