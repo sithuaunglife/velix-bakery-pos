@@ -6,6 +6,12 @@ const useCategoryStore = create(
   persist(
     (set) => {
       return {
+        hasHydrated: false,
+
+        setHasHydrated: (state) =>
+          set({
+            hasHydrated: state,
+          }),
         categories: [
           { id: 0, title: "All" },
           { id: 1, title: "Bread" },
@@ -25,6 +31,9 @@ const useCategoryStore = create(
     },
     {
       name: "category-storage",
+      onRehydrateStorage: () => (state) => {
+        state.setHasHydrated(true);
+      },
     },
   ),
 );
